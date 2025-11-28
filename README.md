@@ -1,7 +1,3 @@
-Here is a comprehensive `README.md` for your Audio Recorder module. It covers the technical implementation, the specific logic for your IoT device, and installation instructions.
-
------
-
 # 🎤 NuSuri Audio Recorder (CoughPod Integration)
 
 This module is a specialized audio recording screen built for React Native (Expo). It is designed to capture high-quality cough audio samples for AI analysis. It features automatic **Bluetooth IoT device detection**, dynamic sample rate switching, and a strict timing workflow to ensure consistent data input for Machine Learning models.
