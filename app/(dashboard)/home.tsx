@@ -61,7 +61,7 @@ const HomePage = () => {
         style={[styles.button1, { backgroundColor: "#FFC300" }]}
       >
         <Link
-          href={"/recorder"}
+          href={"/survey"}
           style={{
             color: "#FFF",
             fontFamily: "Poppins_500Medium",
