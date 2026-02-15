@@ -33,6 +33,7 @@ import {useColorScheme } from "react-native"
         <Stack.Screen name="firstBox" options={{ headerShown: false }} />
         <Stack.Screen name="secondBox" options={{ headerShown: false }} />
         <Stack.Screen name="thirdBox" options={{ headerShown: false }} />
+        <Stack.Screen name="survey" options={{ headerShown: false }} />
       </Stack>
     </>
   );

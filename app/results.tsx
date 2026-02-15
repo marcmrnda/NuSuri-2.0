@@ -9,12 +9,11 @@ import Spacer from "../components/Spacer";
 
 const results = () => {
   const [time, setTime] = useState<number>(1);
-  const fixed = (Math.random() * 39.9 + 1).toFixed(2);
-  const fixed1 = (Math.random() * (50000 - 20000) + 20000);
+  const fixed = (Math.random() * 30.0 + 1).toFixed(2);
+  const fixed1 = (Math.random() * (10000 - 5000) + 5000);
   const [num, setNum] = useState(fixed);
   const targetTime = 2;
 
-  console.log(fixed1)
 
   useEffect(() => {
     const mema = setInterval(() => {
@@ -41,7 +40,7 @@ const results = () => {
             color="#FFC300"
             style={{ textAlign: "center", marginTop: -25 }}
           />
-          <Spacer height={20} />
+          <Spacer height={10} />
           <Text style={styles.title}>Low Risk</Text>
           <Text style={styles.sub}>{num}%</Text>
           <Text style={styles.action}>
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
   littleContainer: {
     flex: 1,
     justifyContent: "center",
-    alignContent: "center",
+    alignContent: "center"
   },
   iconContainer: {
     textAlign: "center",
@@ -89,11 +88,11 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontFamily: "Poppins_600SemiBold",
-    fontSize: 50,
-    lineHeight: 45,
+    fontSize: 70,
+    lineHeight: 80,
     letterSpacing: -1,
     color: "#22C55E",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   sub: {
     fontSize: 32,
@@ -127,6 +126,7 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     padding: 20,
     marginBottom: 50,
+    height: 100,
   },
   buttonContainer: {
     justifyContent: "space-evenly",
