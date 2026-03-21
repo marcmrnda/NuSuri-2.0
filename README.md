@@ -111,7 +111,7 @@ export default function ResultsScreen() {
   const { uri } = useLocalSearchParams();
   
   // uri = "file:///data/user/0/com.nusuri.app/files/assets/recordings/recording_12345.wav"
-  // Ready for Supabase upload!
+  // Ready for Database upload if you have one!
 }
 ```
 
