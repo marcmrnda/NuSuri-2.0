@@ -1,12 +1,18 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import ThemedView from "../ThemedComponents/ThemedView";
 import ThemedText from "../ThemedComponents/ThemedText";
-import hirayon from "../../assets/tbFamilyy.jpg";
+import hirayon from "../assets/tbFamilyy.jpg";
 import React from "react";
-import Spacer from "../ThemedComponents/Spacer";
 import { router } from "expo-router";
-import meme from "../../assets/meme.png";
-import meow from "../../assets/meow.png";
+import meme from "../assets/meme.png";
+import meow from "../assets/meow.png";
 
 interface StoryBook {
   id: number;
@@ -47,39 +53,33 @@ const handlePress = (url? : string) => {
 
 const AboutPage = () => {
   return (
-    <ThemedView style={styles.container} safe={true}>
-      <ThemedText title={true} secondary={false} style={styles.title}>
-        About <Text style={styles.sub}>Us</Text>
-      </ThemedText>
+    <ThemedView style={styles.container} safe>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <ThemedText title secondary={false} style={styles.title}>
+          About <Text style={styles.sub}>Us</Text>
+        </ThemedText>
 
-      {aboutUs.map((a) => {
-        return (
-          <React.Fragment key={a.id}>
-            <View style={styles.secondContainer}>
-              <TouchableOpacity style={styles.littleContainer}
-                onPress={() => handlePress(a.link)}
-              >
-                <Image source={a.image} style={styles.img} />
-              </TouchableOpacity>
+        {aboutUs.map((a) => (
+          <View style={styles.secondContainer} key={a.id}>
+            <TouchableOpacity
+              style={styles.littleContainer}
+              onPress={() => handlePress(a.link)}
+              accessibilityRole="button"
+              accessibilityLabel={`${a.title}: ${a.subtitle}`}
+            >
+              <Image source={a.image} style={styles.img} />
+            </TouchableOpacity>
 
-              <View
-                style={{
-                  flexDirection: "column",
-                  width: 170,
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={styles.text}>{a.title}</Text>
-                <Text style={styles.subtitle}>
-                  {a.subtitle}
-                </Text>
-              </View>
+            <View style={styles.copy}>
+              <Text style={styles.text}>{a.title}</Text>
+              <Text style={styles.subtitle}>{a.subtitle}</Text>
             </View>
-
-            <Spacer height={10}/>
-          </React.Fragment>
-        );
-      })}
+          </View>
+        ))}
+      </ScrollView>
     </ThemedView>
   );
 };
@@ -87,14 +87,18 @@ const AboutPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignContent: "center",
+  },
+  content: {
+    flexGrow: 1,
+    paddingHorizontal: "5%",
+    paddingVertical: 16,
+    gap: 36,
   },
   secondContainer: {
-    flexDirection: "row", // horizontal row
-    flexWrap: "wrap", // allow items to wrap to next line
-    justifyContent: "space-between", // space between items
-    padding: 20,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
   },
   title: {
     textAlign: "center",
@@ -102,17 +106,16 @@ const styles = StyleSheet.create({
     fontSize: 32,
     lineHeight: 45,
     letterSpacing: -1,
-    top: -5,
     color: "#0a1e3f",
-    marginBottom: 20
+    marginBottom: 8,
   },
   sub: {
     color: "#FFC300",
   },
 
   littleContainer: {
-    width: 180,
-    height: 180,
+    width: "50%",
+    aspectRatio: 1,
     borderColor: "#000",
     borderRadius: 10,
     shadowColor: "#000",
@@ -121,10 +124,14 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   img: {
-    width: 180,
-    height: 180,
+    width: "100%",
+    height: "100%",
     borderRadius: 15,
     objectFit: "cover",
+  },
+  copy: {
+    flex: 1,
+    justifyContent: "center",
   },
   text: {
     fontSize: 16,

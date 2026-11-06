@@ -3,6 +3,7 @@ import {
   useColorScheme,
   View,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import ThemedView from "../ThemedComponents/ThemedView";
 import ThemedImage from "../ThemedComponents/ThemedImage";
@@ -14,12 +15,11 @@ import {
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
 import { Outfit_500Medium, Outfit_300Light } from "@expo-google-fonts/outfit";
-import Spacer from "../ThemedComponents/Spacer";
 import ThemedButton from "../ThemedComponents/ThemedButton";
 import { Colors } from "../constants/Colors";
-import { Link, router } from "expo-router";
-import { useState, useEffect } from "react";
-import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router";
+import { useState } from "react";
+
 
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
@@ -44,33 +44,29 @@ const HomePage = () => {
   }
 
   return (
-    <ThemedView safe={true} style={styles.container}>
-      <ThemedText title={false} secondary={true} style={styles.disclaimerText}>
-                        Disclaimer: This app provides screening information only and is not a substitute for professional medical advice or diagnosis. Consult a doctor for any health concerns.
-                    </ThemedText>
-      <ThemedImage style={styles.img} />
-
-      <Spacer height={12.5} />
-
-      <ThemedText secondary={false} title={false} style={styles.text1}>
-        Start recording your cough to assess your tuberculosis risk and take
-        immediate action.
-      </ThemedText>
-
-      <ThemedButton
-        style={[styles.button1, { backgroundColor: "#FFC300" }]}
+    <ThemedView safe style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
       >
-        <Link
-          href={"/survey"}
-          style={{
-            color: "#FFF",
-            fontFamily: "Poppins_500Medium",
-            fontSize: 15,
-          }}
-        >
-          New Recordings
-        </Link>
-      </ThemedButton>
+        <ThemedText title={false} secondary={true} style={styles.disclaimerText}>
+          Disclaimer: This app provides screening information only and is not a
+          substitute for professional medical advice or diagnosis. Consult a
+          doctor for any health concerns.
+        </ThemedText>
+        <ThemedImage style={styles.img} resizeMode="contain" />
+
+        <ThemedText secondary={false} title={false} style={styles.text1}>
+          Start recording your cough to assess your tuberculosis risk and take
+          immediate action.
+        </ThemedText>
+
+        <ThemedButton style={styles.button1}>
+          <Link href="/survey" style={styles.buttonLink}>
+            New Recordings
+          </Link>
+        </ThemedButton>
+      </ScrollView>
     </ThemedView>
   );
 };
@@ -80,44 +76,27 @@ export default HomePage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+  },
+  content: {
+    flexGrow: 1,
     alignItems: "center",
-    alignContent: "center",
+    justifyContent: "center",
+    paddingHorizontal: "6%",
+    paddingVertical: 20,
+    gap: 20,
   },
   disclaimerText: {
-        fontFamily: "Outfit_500Medium",
-        fontSize: 14,
-        lineHeight: 18,
-        color: "#FFC300", // Making it red for emphasis, adjust as needed
-        textAlign: 'center',
-        maxWidth: 310,
-        marginTop: -70,
-        top: -150
-    },
-  title: {
+    width: "100%",
     fontFamily: "Outfit_500Medium",
-    fontSize: 35,
-    lineHeight: 35,
-    letterSpacing: -1,
-    height: 100,
-    marginTop: -7,
+    fontSize: 14,
+    lineHeight: 20,
+    color: "#FFC300",
+    textAlign: "center",
   },
   img: {
-    marginTop: -75,
-    marginBottom: -175,
-    width: 450,
-    height: 350,
-    marginVertical: 10,
+    width: "100%",
+    aspectRatio: 0,
     objectFit: "contain",
-
-  },
-  text: {
-    fontFamily: "Poppins_400Regular",
-    fontSize: 14,
-    lineHeight: 24,
-    letterSpacing: -1,
-    marginTop: -63,
-    width: 140,
   },
   text1: {
     fontFamily: "Outfit_300Light",
@@ -126,24 +105,27 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     textAlign: "center",
     textAlignVertical: "center",
-    width: 300,
-    marginTop: 50,
-    color: "#FFC300"
+    width: "100%",
+    color: "#FFC300",
   },
   button1: {
-    width: 350,
-    height: 63,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    top: 220,
+    paddingVertical: 18,
+    backgroundColor: "#FFC300",
+  },
+  buttonLink: {
+    width: "100%",
+    color: "#FFF",
+    fontFamily: "Poppins_500Medium",
+    fontSize: 15,
+    textAlign: "center",
   },
   anotherContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0)",
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
   },
 });
