@@ -1,47 +1,49 @@
 {
   "expo": {
-    "name": "nusuri",
-    "slug": "auralis",
-    "scheme": "nusuri",
-    "version": "1.0.0",
+    "name": "NuSuri",
+    "slug": "NuSuri",
+    "scheme": "NuSuri",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons2.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/icons2.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
-      "package": "com.anonymous.auralis"
+      "package": "com.hirayon.nusuri_ph"
     },
     "web": {
       "favicon": "./assets/icon.png"
     },
     "plugins": [
       "expo-router",
-      "expo-audio"
+      "expo-audio",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icon.png",
+          "imageWidth": 280,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
     ],
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "86aa1cd9-1dde-4e1d-a78a-0d5312ce6bc7"
+        "projectId": "51714ac2-9d22-4f03-aafd-f90a7da46b7f"
       }
     },
     "owner": "marcmrnda"
