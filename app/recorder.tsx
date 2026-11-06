@@ -1,4 +1,4 @@
-import AudioNoteScreen from "../components/Recorder"
+import AudioNoteScreen from "../components/recorder"
 
 const recorder = () => {
   return (

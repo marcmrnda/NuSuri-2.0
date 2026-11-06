@@ -1,93 +1,199 @@
-import { StyleSheet, View, Animated, Image, Text } from "react-native"; // 💥 Import Animated
-import ThemedText from "../ThemedComponents/ThemedText";
-import ThemedView from "../ThemedComponents/ThemedView";
-import Spacer from "../ThemedComponents/Spacer";
-import ThemedImage from "../ThemedComponents/ThemedImage";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
+
 import { useFonts } from "expo-font";
+
 import {
   Poppins_400Regular,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
+
 import { Outfit_500Medium } from "@expo-google-fonts/outfit";
+
+import { Link } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import ThemedText from "../ThemedComponents/ThemedText";
+import ThemedView from "../ThemedComponents/ThemedView";
+import ThemedImage from "../ThemedComponents/ThemedImage";
 import ThemedButton from "../ThemedComponents/ThemedButton";
-import { Link, Redirect } from "expo-router";
-import { useColorScheme } from "react-native";
-import { Colors } from "../constants/Colors";
-import { useEffect, useRef } from "react"; // 💥 Import useEffect and useRef
+import ThemedBTNText from "../ThemedComponents/ThemedButtonText";
+
 import Nusuri from "../assets/geh.png";
 import hirayon from "../assets/hirayon.png";
-import iconics from "../assets/iconics.png"
-import ThemedBTNText from "../ThemedComponents/ThemedButtonText";
-import { LinearGradient } from "expo-linear-gradient";
+import iconics from "../assets/iconics.png";
 
 const Index = () => {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme ? Colors[colorScheme] : Colors.dark;
+  const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
+  const contentHeight = height - insets.top - insets.bottom;
+
+  // Responsive spacing
+  const spacing = Math.min(16, Math.max(6, contentHeight * 0.015));
+
+  // Responsive side images
+  const sideImageSize = Math.min(
+    width * 0.24,
+    contentHeight * 0.13,
+    140
+  );
+
+  // Responsive main logo
+  const logoSize = Math.min(
+    width * 0.48,
+    contentHeight * 0.22,
+    260
+  );
+
+  // Responsive features image
+  const featureWidth = Math.min(
+    width * 0.58,
+    contentHeight * 0.17,
+    300
+  );
+
+  // Responsive heading
+  const headingFontSize = Math.min(
+    36,
+    width * 0.085,
+    contentHeight * 0.05
+  );
+
+  // Responsive description
+  const descriptionFontSize = Math.min(
+    18,
+    width * 0.041,
+    contentHeight * 0.025
+  );
+
   const [loaded] = useFonts({
     Poppins_400Regular,
     Outfit_500Medium,
     Poppins_600SemiBold,
   });
 
-  // 💥 NEW: Animated Value for Opacity 💥
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1, // Animate to opacity: 1
-      duration: 1000, // 1000 milliseconds = 1 second
-      useNativeDriver: true, // Use native driver for performance
-    }).start(); // Start the animation
-  }, [fadeAnim]); // Run this effect once when the component mounts
-
   if (!loaded) return null;
 
   return (
-    <ThemedView safe={true} style={styles.container}>
+    <ThemedView safe style={styles.container}>
+      {/* Background */}
       <LinearGradient
-      colors={['#e6f0fa', '#ffffff']} // light blue to white
-      start={{ x: 0.5, y: 0 }} // top center
-      end={{ x: 0.5, y: 1 }}   // bottom center
-      style={styles.background}
-    />
-      <View style={styles.littleContainer}>
-        <ThemedImage style={styles.img} />
-      </View>
+        colors={["#e6f0fa", "#ffffff"]}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={styles.background}
+      />
 
-      <View style={styles.littleContainer1}>
-        <Image source={hirayon} style={styles.img2} />
-      </View>
+      {/* Main Content */}
+      <View
+        style={[
+          styles.content,
+          {
+            gap: spacing,
+            paddingVertical: spacing,
+          },
+        ]}
+      >
+        {/* Brand Images */}
+        <View style={styles.brandImages}>
+          <ThemedImage
+            style={[
+              styles.sideImage,
+              {
+                width: sideImageSize,
+                height: sideImageSize,
+              },
+            ]}
+            resizeMode="contain"
+          />
 
-      <View style={styles.littleContainer2}>
-        <Image source={Nusuri} style={styles.img1} />
-      </View>
+          <Image
+            source={hirayon}
+            style={[
+              styles.sideImage,
+              {
+                width: sideImageSize,
+                height: sideImageSize,
+              },
+            ]}
+            resizeMode="contain"
+          />
+        </View>
 
-      <View style={styles.littleContainer3}>
-        <ThemedText title={false} secondary={false} style={styles.text1} adjustsFontSizeToFit>
+        {/* Main Logo */}
+        <Image
+          source={Nusuri}
+          style={[
+            styles.logo,
+            {
+              width: logoSize,
+              height: logoSize / 0.8,
+            },
+          ]}
+          resizeMode="contain"
+        />
+
+        {/* Heading */}
+        <ThemedText
+          title={false}
+          secondary={false}
+          style={[
+            styles.heading,
+            {
+              fontSize: headingFontSize,
+              lineHeight: headingFontSize * 1.25,
+            },
+          ]}
+        >
           Simplifying Screening, Prioritizing Speeding{" "}
           <Text style={styles.title}>Recovery.</Text>
         </ThemedText>
-      </View>
 
-      <View style={styles.littleContainer4}>
-        <ThemedText title={false} secondary={false} style={styles.text2}>
+        {/* Description */}
+        <ThemedText
+          title={false}
+          secondary={false}
+          style={[
+            styles.description,
+            {
+              fontSize: descriptionFontSize,
+              lineHeight: descriptionFontSize * 1.45,
+            },
+          ]}
+        >
           Just Cough, and we take it from there—screening, triage, and faster
           care made simple.
         </ThemedText>
+
+        {/* Features */}
+        <Image
+          source={iconics}
+          style={[
+            styles.features,
+            {
+              width: featureWidth,
+              height: featureWidth,
+            },
+          ]}
+          resizeMode="contain"
+        />
+
+        {/* Get Started Button */}
+        <ThemedButton style={styles.button}>
+          <Link href="/home" style={styles.buttonLink}>
+            <ThemedBTNText style={styles.buttonText}>
+              Kickstart Triage!
+            </ThemedBTNText>
+          </Link>
+        </ThemedButton>
       </View>
-
-       <View style={styles.littleContainer5}>
-       <Image source={iconics} style={styles.img3}/>
-      </View>
-
-
-      <ThemedButton style={styles.button}>
-        
-        <Link href={"/home"} style={{height: 20}}>
-        <ThemedBTNText style={styles.buttonText}>Kickstart Triage!</ThemedBTNText>
-        </Link>
-      </ThemedButton>
-        
     </ThemedView>
   );
 };
@@ -97,116 +203,78 @@ export default Index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
+
   background: {
     ...StyleSheet.absoluteFillObject,
   },
+
+  content: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: "6%",
+  },
+
+  brandImages: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  sideImage: {
+    flexShrink: 0,
+  },
+
+  logo: {
+    flexShrink: 0,
+    transform: [{ scale: 3 }],
+  },
+
   title: {
     color: "#FFC300",
   },
-  img: {
-    width: 130,
-    height: 350,
-    marginVertical: 10,
-    objectFit: "contain",
-  },
-  img1: {
-    width: 750,
-    height: 750,
-    marginTop: 30,
-    objectFit: "contain",
-  },
-  img2: {
-    width: 130,
-    height: 350,
-    marginTop: 30,
-    objectFit: "contain",
-  },
-  img3: {
-    width: 320,
-    height: 300,
-    objectFit: "contain",
-  },
-  disclaimerText: {
-    fontFamily: "Outfit_500Medium",
-    fontSize: 12,
-    lineHeight: 18,
-    color: "#FFC300", // Making it red for emphasis, adjust as needed
-    textAlign: "center",
-    maxWidth: 350,
-  },
-  littleContainer: {
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    flex: 1,
-    top: -140,
-    left: -120,
-  },
-  littleContainer1: {
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    flex: 1,
-    top: -265,
-    left: 120,
-  },
-  littleContainer2: {
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    top: 20,
-  },
-  littleContainer3: {
-    justifyContent: "center",
-    alignItems: "center",
-    top: 120,
-  },
-  littleContainer4: {
-    justifyContent: "center",
-    alignItems: "center",
-    top: 140,
-  },
-   littleContainer5: {
-    justifyContent: "center",
-    alignItems: "center",
-    top: 55
-  },
-  text1: {
+
+  heading: {
+    width: "110%",
     textAlign: "center",
     fontFamily: "Poppins_600SemiBold",
-    fontSize: 36,
-    lineHeight: 45,
     letterSpacing: -1,
-    paddingHorizontal: 15,
     color: "#0a1e3f",
   },
-  text2: {
+
+  description: {
+    width: "105%",
     textAlign: "center",
     fontFamily: "Poppins_400Regular",
-    fontSize: 16,
-    lineHeight: 20,
-    letterSpacing: -1,
-    paddingHorizontal: 17.5,
+    letterSpacing: -0.5,
     color: "#0a1e3f",
   },
+
+  features: {
+    flexShrink: 0,
+    transform: [{scale: 2}]
+  },
+
   button: {
+    width: "100%",
     backgroundColor: "#0a1e3f",
-    width: 370,
-    height: 70,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    top: -20
+    paddingVertical: 18,
+  },
+
+  buttonLink: {
+    width: "100%",
+    alignItems: "center",
   },
 
   buttonText: {
     fontFamily: "Outfit_500Medium",
     fontSize: 20,
-    lineHeight: 18,
-    color: "white", // Making it red for emphasis, adjust as needed
+    color: "white",
     textAlign: "center",
-    width: 200,
-    height: 20
   },
 });

@@ -9,6 +9,7 @@ import {
   ScrollView,
   PermissionsAndroid,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Circle, Defs, RadialGradient, Stop } from "react-native-svg";
@@ -57,6 +58,11 @@ const AudioNoteScreen: React.FC = () => {
   
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
+  const visualizationSize = Math.min(width * 0.72, height * 0.42);
+  const visualizationCenter = visualizationSize / 2;
+  const controlSize = Math.min(width * 0.26, height * 0.14);
+  const controlIconSize = controlSize * 0.4;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -289,28 +295,28 @@ const AudioNoteScreen: React.FC = () => {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: theme.recorderBG }]}>
+    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom, paddingLeft: insets.left, paddingRight: insets.right, backgroundColor: theme.recorderBG }]}>
       <LinearGradient colors={[theme.recorderBG, theme.recorderBG, theme.recorderBG]} style={styles.mainContent}>
         
         {/* Visualization */}
         <View style={styles.audioVisualizationContainer}>
-          <Svg width={280} height={280} style={styles.svgContainer}>
+          <Svg width={visualizationSize} height={visualizationSize} style={styles.svgContainer}>
             <Defs>
               <RadialGradient id="grad1" cx="50%" cy="50%" r="50%">
                 <Stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
                 <Stop offset="100%" stopColor="#f0f0f0" stopOpacity="0.2" />
               </RadialGradient>
             </Defs>
-            <Circle cx="140" cy="140" r="130" fill="none" stroke={isIoTConnected ? "#00FF00" : "#FFC300"} strokeWidth="3" strokeDasharray="10 5" opacity="0.6" />
-            <Circle cx="140" cy="140" r="90" fill={isIoTConnected ? "#00FF00" : "#FFC300"} stroke="#e8e8ff" strokeWidth="1" />
+            <Circle cx={visualizationCenter} cy={visualizationCenter} r={visualizationSize * 0.46} fill="none" stroke={isIoTConnected ? "#00FF00" : "#FFC300"} strokeWidth="3" strokeDasharray="10 5" opacity="0.6" />
+            <Circle cx={visualizationCenter} cy={visualizationCenter} r={visualizationSize * 0.32} fill={isIoTConnected ? "#00FF00" : "#FFC300"} stroke="#e8e8ff" strokeWidth="1" />
           </Svg>
 
           <View style={styles.centerContent}>
-            <Text style={[styles.timerText, { color: colorScheme == "dark" ? "#a855f7" : "#FFFF" }, countdown > 0 && { fontSize: 60, fontWeight: "bold" }]}>
+            <Text style={[styles.timerText, { color: colorScheme == "dark" ? "#a855f7" : "#FFFF", fontSize: width * 0.09 }, countdown > 0 && { fontSize: width * 0.16, fontWeight: "bold" }]}>
               {countdown > 0 ? countdown : isRecording ? formatTime(elapsed) : recordedURI ? "Done" : "Ready"}
             </Text>
             {isIoTConnected && !isRecording && !countdown && !recordedURI && (
-                <Text style={{color: theme.text, fontSize: 12, marginTop: 5}}>
+                <Text style={{color: theme.text, fontSize: width * 0.03, marginTop: 5, textAlign: "center"}}>
                     <MaterialCommunityIcons name="bluetooth" /> IoT Device Connected
                 </Text>
             )}
@@ -321,16 +327,16 @@ const AudioNoteScreen: React.FC = () => {
       {/* Main Control Button */}
       <View style={styles.bottomControls}>
         <TouchableOpacity style={styles.mainControlButton} onPress={handleMainButtonPress} disabled={processing}>
-          <LinearGradient colors={isRecording ? ["#ef4444", "#dc2626"] : ["#a855f7", "#ec4899", "#f59e0b"]} style={styles.pauseButton}>
+          <LinearGradient colors={isRecording ? ["#ef4444", "#dc2626"] : ["#a855f7", "#ec4899", "#f59e0b"]} style={[styles.pauseButton, { width: controlSize, aspectRatio: 1, borderRadius: controlSize / 2 }]}>
             <View style={styles.pauseIconContainer}>
               {countdown > 0 ? (
-                 <MaterialCommunityIcons name="timer-sand" size={40} color="#fff" />
+                 <MaterialCommunityIcons name="timer-sand" size={controlIconSize} color="#fff" />
               ) : isRecording ? (
-                 <View style={styles.stopIconSquare} />
+                 <View style={[styles.stopIconSquare, { width: controlIconSize * 0.75, height: controlIconSize * 0.75 }]} />
               ) : recordedURI ? (
-                 <MaterialCommunityIcons name="check" size={40} color="#fff" />
+                 <MaterialCommunityIcons name="check" size={controlIconSize} color="#fff" />
               ) : (
-                 <MaterialCommunityIcons name="microphone" size={40} color="#fff" />
+                 <MaterialCommunityIcons name="microphone" size={controlIconSize} color="#fff" />
               )}
             </View>
           </LinearGradient>
@@ -348,10 +354,10 @@ const AudioNoteScreen: React.FC = () => {
                     onPress={handleTogglePreview}
                     style={styles.previewButton}
                 >
-                    <Ionicons 
-                        name={player.playing ? "stop-circle" : "play-circle"} 
-                        size={64} 
-                        color="#a855f7" 
+                    <Ionicons
+                        name={player.playing ? "stop-circle" : "play-circle"}
+                        size={width * 0.16}
+                        color="#a855f7"
                     />
                     <Text style={{ color: theme.text, marginTop: 5 }}>
                         {player.playing ? "Stop Preview" : "Play Recording"}
@@ -373,7 +379,7 @@ const AudioNoteScreen: React.FC = () => {
 
       {/* About Modal */}
       <Modal visible={aboutModalVisible} animationType="slide" onRequestClose={toggleAboutModal}>
-        <View style={{ flex: 1, paddingTop: insets.top + 20, backgroundColor: colorScheme == "dark" ? "#0A1E3F" : "#FFFFFF" }}>
+        <View style={{ flex: 1, paddingTop: insets.top + 20, paddingBottom: insets.bottom, backgroundColor: colorScheme == "dark" ? "#0A1E3F" : "#FFFFFF" }}>
           <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 12 }}>
             <View style={{ alignItems: "center", marginBottom: 12 }}>
               <MaterialCommunityIcons name="information-outline" size={64} color={theme.title} />
@@ -391,7 +397,7 @@ const AudioNoteScreen: React.FC = () => {
             </Text>
           </ScrollView>
           <View style={{ padding: 20 }}>
-            <Pressable onPress={toggleAboutModal} style={{ alignSelf: "center", paddingVertical: 12, paddingHorizontal: 30, backgroundColor: theme.button2, borderRadius: 10, width: 250 }}>
+            <Pressable onPress={toggleAboutModal} style={{ alignSelf: "center", paddingVertical: 12, paddingHorizontal: 30, backgroundColor: theme.button2, borderRadius: 10, width: "100%" }}>
               <Text style={{ color: colorScheme == "dark" ? "#012f59" : "#FFFF", fontWeight: "600", fontSize: 18, textAlign: "center" }}>Close</Text>
             </Pressable>
           </View>
@@ -403,16 +409,16 @@ const AudioNoteScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  mainContent: { flex: 1, justifyContent: "center", alignItems: "center", paddingTop: 50 },
+  mainContent: { flex: 1, justifyContent: "center", alignItems: "center" },
   audioVisualizationContainer: { position: "relative", justifyContent: "center", alignItems: "center" },
   svgContainer: { position: "absolute" },
-  centerContent: { justifyContent: "center", alignItems: "center", zIndex: 1, height: 100 },
+  centerContent: { justifyContent: "center", alignItems: "center", zIndex: 1, padding: 8 },
   timerText: { fontSize: 32, fontWeight: "300", letterSpacing: 2, textAlign: "center" },
-  bottomControls: { flexDirection: "row", justifyContent: "center", alignItems: "center", paddingHorizontal: 40, paddingVertical: 60 },
+  bottomControls: { flexDirection: "row", justifyContent: "center", alignItems: "center", paddingHorizontal: "10%", paddingVertical: 24 },
   mainControlButton: { elevation: 8, shadowColor: "#000", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 4.65 },
-  pauseButton: { width: 100, height: 100, borderRadius: 50, justifyContent: "center", alignItems: "center" },
+  pauseButton: { justifyContent: "center", alignItems: "center" },
   pauseIconContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  stopIconSquare: { width: 30, height: 30, backgroundColor: "#fff", borderRadius: 4 },
+  stopIconSquare: { backgroundColor: "#fff", borderRadius: 4 },
   
   // Review Modal Styles
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },

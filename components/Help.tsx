@@ -5,6 +5,7 @@ import {
   View,
   Linking,
   Alert,
+  ScrollView,
 } from "react-native";
 import React from "react";
 import ThemedView from "../ThemedComponents/ThemedView";
@@ -72,13 +73,13 @@ const helpTopics: Help[] = [
     id: 1,
     title: "How to use",
     icon: "info-circle",
-    link: "/home",
+    link: "/howToUse",
   },
   {
     id: 2,
     title: "FAQ",
     icon: "question-circle",
-    link: "/home",
+    link: "/faq",
   },
 ];
 
@@ -99,8 +100,11 @@ const legalInfo: Help[] = [
 
 const HelpPage = () => {
   return (
-    <ThemedView style={style.container} safe={true}>
-
+    <ThemedView style={style.container} safe>
+      <ScrollView
+        contentContainerStyle={style.content}
+        showsVerticalScrollIndicator={false}
+      >
       <ThemedText title={true} secondary={false} style={style.text}>
         Help <Text style={style.subtext}>&</Text> Support
       </ThemedText>
@@ -172,6 +176,7 @@ const HelpPage = () => {
           </React.Fragment>
         );
       })}
+      </ScrollView>
     </ThemedView>
   );
 };
@@ -179,8 +184,12 @@ const HelpPage = () => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+  },
+  content: {
+    flexGrow: 1,
     alignItems: "center",
+    paddingHorizontal: "5%",
+    paddingVertical: 16,
   },
   text: {
     textAlign: "center",
@@ -188,47 +197,42 @@ const style = StyleSheet.create({
     fontSize: 28,
     lineHeight: 45,
     letterSpacing: -1,
-    width: 290,
-    top: -240,
+    width: "100%",
     color: "#0a1e3f",
-    marginTop: 400,
+    marginBottom: 24,
   },
   subtext: {
     color: "#FFC300",
   },
   subtext1: {
-    textAlign: "center",
     fontFamily: "Poppins_600SemiBold",
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: -1,
-    width: 290,
-    top: -200,
-    left: -140,
+    width: "100%",
+    textAlign: "left",
     color: "#FFC300",
-    marginTop: -20
+    marginBottom: 12,
   },
   subtext2: {
-    textAlign: "center",
     fontFamily: "Poppins_600SemiBold",
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: -1,
-    width: 290,
-    top: -185,
-    left: -150,
-    color: "#FFC300"
+    width: "100%",
+    textAlign: "left",
+    color: "#FFC300",
+    marginBottom: 12,
   },
   subtext3: {
-    textAlign: "center",
     fontFamily: "Poppins_600SemiBold",
     fontSize: 18,
     lineHeight: 25,
     letterSpacing: -1,
-    width: 290,
-    top: -170,
-    left: -100,
-    color: "#FFC300"
+    width: "100%",
+    textAlign: "left",
+    color: "#FFC300",
+    marginBottom: 12,
   },
   littleContainer: {
     flexDirection: "row", // Aligns items horizontally
@@ -236,13 +240,13 @@ const style = StyleSheet.create({
     backgroundColor: "white",
     padding: 16,
     borderRadius: 12, // Rounded corners
-    marginHorizontal: 16,
+    width: "100%",
     // simplistic shadow for iOS/Android
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 5,
     elevation: 2,
-    top: -175,
+    marginBottom: 12,
   },
   littleContainer1: {
     flexDirection: "row", // Aligns items horizontally
@@ -250,13 +254,13 @@ const style = StyleSheet.create({
     backgroundColor: "white",
     padding: 16,
     borderRadius: 12, // Rounded corners
-    marginHorizontal: 16,
+    width: "100%",
     // simplistic shadow for iOS/Android
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 5,
     elevation: 2,
-    top: -185,
+    marginBottom: 12,
   },
   littleContainer2: {
     flexDirection: "row", // Aligns items horizontally
@@ -264,13 +268,13 @@ const style = StyleSheet.create({
     backgroundColor: "white",
     padding: 16,
     borderRadius: 12, // Rounded corners
-    marginHorizontal: 16,
+    width: "100%",
     // simplistic shadow for iOS/Android
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowRadius: 5,
     elevation: 2,
-    top: -155,
+    marginBottom: 12,
   },
   iconContainer: {
     marginRight: 16, // Space between icon and text

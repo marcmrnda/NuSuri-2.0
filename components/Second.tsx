@@ -1,48 +1,64 @@
-import { StyleSheet, Text, View, ImageBackground, FlatList, Dimensions, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useFonts } from "expo-font";
+
+import {
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  FlatList,
+  useWindowDimensions,
+  TouchableOpacity,
+} from 'react-native';
+
+import React, { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useFonts } from 'expo-font';
 import {
   Poppins_400Regular,
   Poppins_600SemiBold,
-} from "@expo-google-fonts/poppins";
-import { Outfit_500Medium } from "@expo-google-fonts/outfit";
-import TBFamily from "../assets/firstBox1.png"
-import ph from "../assets/ph.png"
-import hp from "../assets/hp.png"
+} from '@expo-google-fonts/poppins';
+
+import { Outfit_500Medium } from '@expo-google-fonts/outfit';
+
+import firstPhoto from '../assets/20.webp';
+import secondPhoto from '../assets/15.jpg';
+import thirdPhoto from '../assets/19.jpg';
+
 import ThemedBTNText from '../ThemedComponents/ThemedButtonText';
 import { Link } from 'expo-router';
 
 interface story {
-  id: number,
-  image: number,
-  title: string,
-  desc: string
+  id: number;
+  image: number;
+  title: string;
+  desc: string;
 }
 
-const st: story[] = [{
-  id: 1,
-  image: TBFamily,
-  title: "A Family Broken Every 15 Minutes",
-  desc: "Every single day, nearly 100 Filipinos die from Tuberculosis. That is 100 families who lose a father, a mother, or a child to a silent killer."
-},
-{
-  id: 2,
-  image: ph,
-  title: "Our #1 Invisible Enemy",
-  desc: "Tuberculosis is the top infectious killer in the Philippines. It takes more lives than any other communicable disease, yet it often spreads unnoticed until it’s too late."
-},
-{
-  id: 3,
-  image: hp,
-  title: "A Preventable Tragedy",
-  desc: "The worst part? TB is curable. We built NuSuri to detect it early—so no family has to say goodbye too soon."
-}];
-
-const { width } = Dimensions.get("window");
+const st: story[] = [
+  {
+    id: 1,
+    image: firstPhoto,
+    title: 'TB Can’t Wait',
+    desc: 'In many community health facilities, delayed TB screening means missed diagnoses, continued spread, and lives at risk.',
+  },
+  {
+    id: 2,
+    image: secondPhoto,
+    title: 'NuSuri: TB Triage in 1 Minute',
+    desc: 'An AI-powered device that analyzes cough sounds and symptoms to instantly assess TB risk—no lab, no waiting.',
+  },
+  {
+    id: 3,
+    image: thirdPhoto,
+    title: 'Faster Decisions, Better Care',
+    desc: 'NuSuri empowers health workers with quick, reliable TB triage—helping prioritize patients and save lives in underserved communities.',
+  },
+];
 
 const Second = () => {
-  const insets = useSafeAreaInsets()
+  const { width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
   const [index, setIndex] = useState(0);
 
   const [loaded] = useFonts({
@@ -51,13 +67,17 @@ const Second = () => {
     Poppins_600SemiBold,
   });
 
+  if (!loaded) return null;
+
   const handleScroll = (e: any) => {
-    const newIndex = Math.round(e.nativeEvent.contentOffset.x / width);
+    const newIndex = Math.round(
+      e.nativeEvent.contentOffset.x / width
+    );
     setIndex(newIndex);
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.root}>
       <FlatList
         data={st}
         horizontal
@@ -67,122 +87,187 @@ const Second = () => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         renderItem={({ item }) => (
-            <ImageBackground 
-    style={[
-      styles.container,
-      {
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        paddingLeft: insets.left,
-        paddingRight: insets.right,
-        width: width,
-      }
-    ]}
-    resizeMode="stretch"
-    source={item.image}
-  >
-    <View style={styles.littleContainer}>
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.text}>{item.desc}</Text>
-    </View>
+          <ImageBackground
+            style={[
+              styles.container,
+              {
+                paddingTop: insets.top + 24,
+                paddingBottom: insets.bottom + 24,
+                paddingLeft: insets.left + 20,
+                paddingRight: insets.right + 20,
+                width,
+              },
+            ]}
+            resizeMode="cover"
+            source={item.image}
+          >
+            {/* Dark photo overlay */}
+            <View style={styles.imageOverlay} />
 
-    {/* DOTS NOW INSIDE IMAGE */}
-    <View style={styles.dotsInside}>
-      {st.map((_, i) => (
-        <View
-          key={i}
-          style={[
-            styles.dot,
-            index === i && styles.activeDot
-          ]}
-        />
-      ))}
-    </View>
+            <View style={styles.pageContent}>
+              <View style={styles.story}>
+                <Text style={styles.title}>
+                  {item.title}
+                </Text>
 
-    {index === 2 ? <TouchableOpacity style={styles.button}>
-        <Link href={"/about"} style={{height: 20}}>
-        <ThemedBTNText style={styles.buttonText}>Done</ThemedBTNText>
-        </Link>
-    </TouchableOpacity>: null}
+                <Text style={styles.text}>
+                  {item.desc}
+                </Text>
+              </View>
 
-  </ImageBackground>
-)}
+              <View style={styles.footer}>
+                <View style={styles.dotsInside}>
+                  {st.map((_, i) => (
+                    <View
+                      key={i}
+                      style={[
+                        styles.dot,
+                        {
+                          width: width * 0.02,
+                          height: width * 0.02,
+                          borderRadius: width * 0.01,
+                        },
+                        index === i && {
+                          width: width * 0.05,
+                          backgroundColor: '#FFFFFF',
+                        },
+                      ]}
+                    />
+                  ))}
+                </View>
+
+                {index === st.length - 1 && (
+                  <TouchableOpacity
+                    style={styles.button}
+                    accessibilityRole="button"
+                    accessibilityLabel="Done"
+                  >
+                    <Link
+                      href="/about"
+                      style={styles.buttonLink}
+                    >
+                      <ThemedBTNText style={styles.buttonText}>
+                        Done
+                      </ThemedBTNText>
+                    </Link>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </ImageBackground>
+        )}
       />
-
-      
     </View>
   );
-}
+};
 
-export default Second
+export default Second;
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    justifyContent: "center",
-    alignContent: "center"
-  },
-  title: {
-    textAlign: "center",
-    fontFamily: "Poppins_600SemiBold",
-    fontSize: 24,
-    lineHeight: 45,
-    letterSpacing: -1,
-    top: -5,
-    color: "#FFFFFF",
-    marginBottom: 0
-  },
-  text: {
-    fontSize: 14,
-    fontFamily: "Outfit_500Medium",
-    fontWeight: "600",
-    color: "#FFFFFF",
-    marginBottom: 4,
-    textAlign: "center",
-    paddingHorizontal: 15
-  },
-  littleContainer: {
-    marginTop: -650
+    backgroundColor: '#000000',
   },
 
-  /* DOTS */
-  dotsContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 25,
+  container: {
+    flex: 1,
   },
+
+  // Dark transparent overlay for photo readability
+  imageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+  },
+
+  pageContent: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  story: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    gap: 12,
+  },
+
+  // White title with strong dark shadow
+  title: {
+    textAlign: 'center',
+    fontFamily: 'Poppins_600SemiBold',
+    fontSize: 24,
+    lineHeight: 36,
+    letterSpacing: -0.5,
+    color: '#FFFFFF',
+
+    textShadowColor: 'rgba(0, 0, 0, 0.95)',
+    textShadowOffset: { width: 1, height: 3 },
+    textShadowRadius: 8,
+
+    elevation: 5,
+  },
+
+  // Soft white description with readable shadow
+  text: {
+    fontSize: 15,
+    fontFamily: 'Outfit_500Medium',
+    fontWeight: '500',
+    color: '#F5F5F5',
+    marginBottom: 4,
+    textAlign: 'center',
+    paddingHorizontal: 8,
+    lineHeight: 23,
+
+    textShadowColor: 'rgba(0, 0, 0, 0.95)',
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 6,
+
+    elevation: 5,
+  },
+
   dot: {
-    height: 8,
-    width: 8,
-    backgroundColor: "#aaa",
-    borderRadius: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.55)',
     marginHorizontal: 5,
   },
-  activeDot: {
-    width: 20,
-    backgroundColor: "#fff",
-  },
+
   dotsInside: {
-  flexDirection: "row",
-  justifyContent: "center",
-  marginTop: 20,
-},
-button: {
-    backgroundColor: "transparent",
-    width: 370,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    top: 650,
-    left: 20
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 20,
   },
+
+  footer: {
+    width: '100%',
+    alignItems: 'center',
+  },
+
+  // NuSuri green button
+  button: {
+    width: '100%',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    backgroundColor: '#fdc10e',
+
+    elevation: 5,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+
+  buttonLink: {
+    width: '100%',
+    alignItems: 'center',
+  },
+
   buttonText: {
-    fontFamily: "Outfit_500Medium",
+    fontFamily: 'Outfit_500Medium',
     fontSize: 20,
-    lineHeight: 18,
-    color: "white", // Making it red for emphasis, adjust as needed
-    textAlign: "center",
-    width: 200,
-    height: 20
+    lineHeight: 24,
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
 });

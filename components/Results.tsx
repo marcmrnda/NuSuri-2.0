@@ -1,4 +1,10 @@
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import ThemedView from "../ThemedComponents/ThemedView";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -26,10 +32,14 @@ const Results = () => {
   }, []);
 
   return (
-    <ThemedView safe={true} style={styles.container}>
+    <ThemedView safe style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
       {time == 1 ? (
         <>
-        <ActivityIndicator color={"green"} size={150} style={{marginTop: -20, padding: 20}} />
+        <ActivityIndicator color={"green"} size="large" style={styles.loader} />
          <Text style={styles.action1}>Hang tight! Our AI is analyzing your cough — it usually takes under a minute.</Text>
         </>
       ) : (
@@ -38,7 +48,7 @@ const Results = () => {
             name="waveform"
             size={100}
             color="#FFC300"
-            style={{ textAlign: "center", marginTop: -25 }}
+            style={{ textAlign: "center" }}
           />
           <Spacer height={10} />
           <Text style={styles.title}>Low Risk</Text>
@@ -67,6 +77,7 @@ const Results = () => {
           </View>
         </View>
       )}
+      </ScrollView>
     </ThemedView>
   );
 };
@@ -74,22 +85,29 @@ const Results = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    flexGrow: 1,
     justifyContent: "center",
-    alignContent: "center",
+    alignItems: "center",
+    paddingHorizontal: "6%",
+    paddingVertical: 20,
   },
   littleContainer: {
-    flex: 1,
+    width: "100%",
+    flexGrow: 1,
     justifyContent: "center",
-    alignContent: "center"
+    alignItems: "center",
   },
-  iconContainer: {
-    textAlign: "center",
+  loader: {
+    marginBottom: 20,
+    padding: 20,
   },
   title: {
     textAlign: "center",
     fontFamily: "Poppins_600SemiBold",
-    fontSize: 70,
-    lineHeight: 80,
+    fontSize: 56,
+    lineHeight: 64,
     letterSpacing: -1,
     color: "#22C55E",
     marginBottom: 20,
@@ -102,7 +120,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   action: {
-    fontSize: 24,
+    fontSize: 20,
     paddingHorizontal: 10,
     color: "#888", // Grey color for subtitle
     textAlign: "center",
@@ -110,7 +128,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   action1: {
-    fontSize: 28,
+    fontSize: 22,
     paddingHorizontal: 10,
     color: "#0a1e3f", // Grey color for subtitle
     textAlign: "center",
@@ -123,28 +141,29 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: "#FFC300", // Making it red for emphasis, adjust as needed
     textAlign: "center",
-    maxWidth: 400,
+    width: "100%",
     padding: 20,
-    marginBottom: 50,
-    height: 100,
+    marginBottom: 20,
   },
   buttonContainer: {
-    justifyContent: "space-evenly",
+    width: "100%",
+    justifyContent: "center",
     flexDirection: "row",
-    gap: 10,
+    flexWrap: "wrap",
+    gap: 8,
   },
   backButton: {
     backgroundColor: "#0a1e3f",
-    width: 180,
-    height: 50,
+    flex: 1,
+    minWidth: "45%",
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
   },
   homeButton: {
     backgroundColor: "#FFC300",
-    width: 180,
-    height: 50,
+    flex: 1,
+    minWidth: "45%",
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
